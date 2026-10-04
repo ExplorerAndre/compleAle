@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buon compleanno, Alessio</title>
+<style>
+:root{
+  --bg:#F2F2F7; --card:#FFFFFF; --label:#000000; --label2:rgba(60,60,67,.6);
+  --sep:rgba(60,60,67,.18); --fill:rgba(120,120,128,.12); --blue:#007AFF; --press:rgba(0,0,0,.05);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#000000; --card:#1C1C1E; --label:#FFFFFF; --label2:rgba(235,235,245,.6);
+    --sep:rgba(84,84,88,.6); --fill:rgba(120,120,128,.24); --blue:#0A84FF; --press:rgba(255,255,255,.06);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#000000; --card:#1C1C1E; --label:#FFFFFF; --label2:rgba(235,235,245,.6);
+  --sep:rgba(84,84,88,.6); --fill:rgba(120,120,128,.24); --blue:#0A84FF; --press:rgba(255,255,255,.06);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;min-height:100%;background:var(--bg);color:var(--label);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:17px;line-height:1.35;letter-spacing:-0.01em;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+main{max-width:440px;margin:0 auto;padding:12px 16px 36px}
+h1,h2,h3{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",sans-serif}
+p{margin:0}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:12px}
+.hidden{display:none!important}
+.screen{animation:in .35s ease both}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border-radius:22px;padding:22px}
+.footnote{color:var(--label2);font-size:13px;text-align:center;margin-top:14px}
+
+.large{font-size:34px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;margin:28px 4px 8px}
+.sub{color:var(--label2);margin:0 4px 22px}
+
+.gift{
+  position:relative;aspect-ratio:1.586/1;border-radius:22px;padding:22px;overflow:hidden;
+  background:#111114;color:#fff;display:flex;flex-direction:column;justify-content:space-between;
+  box-shadow:0 20px 40px -18px rgba(0,0,0,.45);
+  animation:lift .9s cubic-bezier(.2,.9,.25,1.15) both;
+}
+@keyframes lift{from{transform:translateY(24px) scale(.94);opacity:0}to{transform:none;opacity:1}}
+.gift::before{
+  content:"";position:absolute;inset:-40%;
+  background:conic-gradient(from 200deg at 70% 40%,#FF375F,#FF9F0A,#30D158,#64D2FF,#BF5AF2,#FF375F);
+  filter:blur(46px);opacity:.55;
+}
+.gift > *{position:relative}
+.gift .top{font-size:15px;font-weight:600;opacity:.92}
+.gift .amount{font-size:64px;font-weight:700;letter-spacing:-0.04em;line-height:1}
+.gift .who{font-size:15px;opacity:.85}
+
+.btn{display:block;width:100%;height:52px;border-radius:14px;background:var(--blue);color:#fff;font-size:17px;font-weight:600;transition:transform .1s,opacity .1s}
+.btn:active{transform:scale(.98);opacity:.85}
+.btn.plain{background:var(--fill);color:var(--blue)}
+.btn[disabled]{opacity:.4;cursor:default}
+
+.nav{display:flex;align-items:center;justify-content:space-between;height:44px}
+.backbtn{color:var(--blue);display:flex;align-items:center;gap:4px;padding:6px 4px}
+.backbtn svg{width:11px;height:19px}
+.step{color:var(--label2);font-size:15px;font-variant-numeric:tabular-nums}
+.bar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden;margin:6px 4px 0}
+.bar i{display:block;height:100%;width:0;background:var(--blue);border-radius:2px;transition:width .35s ease}
+
+.qcard{margin-top:20px;padding:26px 22px}
+.qcard h2{font-size:26px;font-weight:700;letter-spacing:-0.02em;line-height:1.15}
+.list{background:var(--card);border-radius:22px;margin-top:14px;overflow:hidden}
+.row{width:100%;display:flex;align-items:center;gap:14px;text-align:left;padding:0 18px;min-height:58px;position:relative;transition:background .15s}
+.row + .row::before{content:"";position:absolute;top:0;left:18px;right:0;height:.5px;background:var(--sep)}
+.row:active,.row.picked{background:var(--press)}
+.row .tx{flex:1;padding:16px 0}
+.row .ck{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--sep);flex:none;display:grid;place-items:center;transition:background .15s}
+.row.picked .ck{background:var(--blue);border-color:var(--blue)}
+.row.picked .ck::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+
+/* Carousel */
+.spinhead{margin:20px 4px 18px}
+.spinhead h2{font-size:28px;font-weight:700;letter-spacing:-0.025em;line-height:1.1;margin-bottom:6px}
+.spinhead p{color:var(--label2)}
+.reel{
+  position:relative;overflow:hidden;margin:0 -16px 22px;padding:14px 0 18px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);
+}
+.track{display:flex;gap:12px;will-change:transform}
+.photo{
+  flex:none;width:62vw;max-width:270px;aspect-ratio:4/5;border-radius:22px;position:relative;overflow:hidden;
+  background-size:cover;background-position:center;color:#fff;
+  box-shadow:0 14px 30px -16px rgba(0,0,0,.5);
+  transition:transform .5s cubic-bezier(.2,1.3,.4,1),opacity .4s,filter .4s;
+}
+.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.55))}
+.photo span{position:absolute;left:16px;bottom:14px;right:16px;z-index:1;font-size:21px;font-weight:700;letter-spacing:-0.02em;
+  opacity:0;transform:translateY(8px);transition:opacity .5s ease .25s,transform .5s ease .25s}
+.photo::before{content:"?";position:absolute;inset:0;display:grid;place-items:center;z-index:1;
+  font-size:88px;font-weight:700;color:rgba(255,255,255,.85);transition:opacity .3s}
+.reel.done .photo.win span{opacity:1;transform:none}
+.reel.done .photo.win::before{opacity:0}
+.reel.done .photo{opacity:.35;filter:saturate(.4)}
+.reel.done .photo.win{opacity:1;filter:none;transform:scale(1.05)}
+
+.result{margin-top:4px;padding:24px 22px;animation:pop .5s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes pop{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+.kicker{font-size:13px;color:var(--label2);font-weight:600;margin-bottom:4px}
+.result h3{font-size:24px;font-weight:700;letter-spacing:-0.02em;margin-bottom:10px}
+.result .why{color:var(--label2);line-height:1.45}
+.planb{margin-top:16px;padding-top:14px;border-top:.5px solid var(--sep);font-size:15px;color:var(--label2)}
+.planb strong{color:var(--label);font-weight:600}
+
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:10}
+.confetti b{position:absolute;top:-20px;width:8px;height:14px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important}
+  .confetti{display:none}
+}
+</style>
+</head>
+<body>
+<main>
+
+  <section class="screen" id="intro">
+    <h1 class="large">Buon compleanno, Alessio</h1>
+    <p class="sub">Oggi il regalo lo scegli tu, ma con un piccolo aiuto. Rispondi a qualche domanda su di te e scopri come spendere al meglio il tuo buono.</p>
+    <div class="gift" aria-label="Buono regalo da 50 euro per Alessio">
+      <div class="top">Buono regalo</div>
+      <div class="amount">50 €</div>
+      <div class="who">Per Alessio, con affetto</div>
+    </div>
+    <div style="height:26px"></div>
+    <button class="btn" id="start">Inizia</button>
+    <p class="footnote">7 domande, meno di un minuto</p>
+  </section>
+
+  <section class="hidden" id="quiz">
+    <div class="nav">
+      <button class="backbtn" id="back">
+        <svg viewBox="0 0 12 20" fill="none" aria-hidden="true"><path d="M10 2 2 10l8 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Indietro
+      </button>
+      <span class="step" id="step"></span>
+    </div>
+    <div class="bar"><i id="barfill"></i></div>
+    <div class="screen" id="qbox">
+      <div class="card qcard"><h2 id="qtext"></h2></div>
+      <div class="list" id="answers"></div>
+    </div>
+  </section>
+
+  <section class="hidden" id="spin">
+    <div class="spinhead screen">
+      <h2>Il momento della verità</h2>
+      <p>Le tue risposte hanno già deciso. Tocca il pulsante e guarda dove si ferma.</p>
+    </div>
+    <div class="reel" id="reel"><div class="track" id="track"></div></div>
+    <button class="btn" id="spinbtn">Scopri il tuo regalo</button>
+    <div id="resultbox"></div>
+  </section>
+
+</main>
+<div class="confetti" id="confetti"></div>
+
+<script>
+/* Per mettere foto vere: incolla un data URI (o lascia vuoto per lo sfondo sfumato) */
+const PHOTOS = { palestra:"", amazon:"", little:"", green:"", altro:"" };
+
+const OPTIONS = {
+  palestra:{name:"Palestra", bg:"linear-gradient(150deg,#FF6B6B,#C2185B)",
+    title:"Abbonamento in palestra",
+    why:"Ti piace metterti alla prova e vedere i tuoi progressi. Un mese di allenamenti è il modo perfetto per iniziare l'anno nuovo con energia."},
+  amazon:{name:"Amazon", bg:"linear-gradient(150deg,#FFB547,#E8590C)",
+    title:"Un regalo su Amazon",
+    why:"Ti godi i tuoi spazi e le cose che usi ogni giorno. Scegli quella cosa che aspetti da tempo e coccolati un po': oggi te lo meriti."},
+  little:{name:"Little World", bg:"linear-gradient(150deg,#C77DFF,#5A189A)",
+    title:"Giornata a Little World",
+    why:"Per te le cose belle sono più belle se condivise. Una giornata di risate in famiglia è il ricordo che vale più di tutto."},
+  green:{name:"Green Forest", bg:"linear-gradient(150deg,#52D681,#1B5E20)",
+    title:"Avventura a Green Forest",
+    why:"Ami l'aria aperta e una sana dose di coraggio. Una giornata tra gli alberi, in famiglia, è la storia che racconterai per mesi."},
+  altro:{name:"Scelta libera", bg:"linear-gradient(150deg,#5AC8FA,#1D4ED8)",
+    title:"Scelta libera",
+    why:"Pensi a lungo termine e hai le idee chiare. I 50 € sono tuoi: mettili da parte o usali per quel progetto che hai in testa."}
+};
+const ORDER = ["palestra","amazon","little","green","altro"];
+
+const QUESTIONS = [
+  {q:"Come ti ricarichi dopo una settimana intensa?",a:[
+    ["Muovendomi, ho bisogno di sfogarmi",{palestra:3}],
+    ["Con calma, nei miei spazi",{amazon:2,altro:1}],
+    ["Con le persone a cui tengo",{little:2,green:1}],
+    ["Uscendo all'aria aperta",{green:3}]]},
+  {q:"Cosa ti fa sentire davvero soddisfatto?",a:[
+    ["Vedere che sto migliorando",{palestra:3}],
+    ["Avere finalmente una cosa che volevo",{amazon:3}],
+    ["Una giornata piena di risate",{little:3}],
+    ["Superare una piccola paura",{green:3}],
+    ["Raggiungere un obiettivo a lungo termine",{altro:3}]]},
+  {q:"Quale frase ti somiglia di più?",a:[
+    ["Prima il dovere, poi il piacere",{altro:2,palestra:1}],
+    ["Meglio fare che pensare",{green:2,palestra:1}],
+    ["Le cose belle vanno condivise",{little:3}],
+    ["Ogni tanto bisogna trattarsi bene",{amazon:2,altro:1}]]},
+  {q:"Il tuo ambiente ideale?",a:[
+    ["Dove c'è movimento ed energia",{palestra:2,little:1}],
+    ["Casa mia, con le mie cose",{amazon:3}],
+    ["In mezzo al verde",{green:3}],
+    ["Ovunque, purché in compagnia",{little:2,altro:1}]]},
+  {q:"Davanti a un imprevisto, tu…",a:[
+    ["Lo affronto subito di petto",{green:2,palestra:1}],
+    ["Mi organizzo e faccio un piano",{palestra:2,altro:1}],
+    ["Ci rido su insieme agli altri",{little:3}],
+    ["Mi prendo il mio tempo",{altro:2,amazon:1}]]},
+  {q:"Se avessi un'ora in più ogni giorno, la useresti per…",a:[
+    ["Prendermi cura di me",{palestra:3}],
+    ["Un hobby o un progetto mio",{altro:2,amazon:1}],
+    ["Stare con la famiglia",{little:2,green:1}],
+    ["Scoprire posti nuovi",{green:2,altro:1}]]},
+  {q:"Tra un anno, cosa vorresti ricordare di questo compleanno?",a:[
+    ["Un cambiamento iniziato quel giorno",{palestra:3}],
+    ["Qualcosa che uso ancora ogni giorno",{amazon:3}],
+    ["Una foto di tutti insieme",{little:2,green:1}],
+    ["Una bella storia da raccontare",{green:2,altro:1}]]}
+];
+
+const $ = id => document.getElementById(id);
+let current = 0, picks = [], ranking = [], spun = false;
+const LOOPS = 9;
+
+function show(id){
+  ["intro","quiz","spin"].forEach(s => $(s).classList.toggle("hidden", s!==id));
+  window.scrollTo(0,0);
+}
+
+function renderQuestion(){
+  const Q = QUESTIONS[current];
+  $("step").textContent = `${current+1} di ${QUESTIONS.length}`;
+  $("barfill").style.width = (current/QUESTIONS.length*100)+"%";
+  $("qtext").textContent = Q.q;
+  const box = $("qbox"); box.classList.remove("screen"); void box.offsetWidth; box.classList.add("screen");
+  $("answers").innerHTML = "";
+  Q.a.forEach(([label],i)=>{
+    const b = document.createElement("button");
+    b.className = "row" + (picks[current]===i ? " picked":"");
+    b.innerHTML = `<span class="tx">${label}</span><span class="ck" aria-hidden="true"></span>`;
+    b.onclick = () => choose(i,b);
+    $("answers").appendChild(b);
+  });
+}
+
+function choose(i,btn){
+  picks[current] = i;
+  document.querySelectorAll(".row").forEach(r=>r.classList.remove("picked"));
+  btn.classList.add("picked");
+  if(navigator.vibrate) navigator.vibrate(8);
+  setTimeout(()=>{
+    if(current < QUESTIONS.length-1){ current++; renderQuestion(); }
+    else { $("barfill").style.width="100%"; setTimeout(goSpin,200); }
+  },280);
+}
+
+function compute(){
+  const score = {palestra:0,amazon:0,little:0,green:0,altro:0};
+  picks.forEach((p,qi)=>{ const pts = QUESTIONS[qi].a[p][1]; for(const k in pts) score[k]+=pts[k]; });
+  ranking = Object.entries(score).map(([k,v])=>[k,v+Math.random()*0.5]).sort((a,b)=>b[1]-a[1]).map(([k])=>k);
+}
+
+function photoStyle(k){
+  return PHOTOS[k] ? `background-image:url('${PHOTOS[k]}')` : `background-image:${OPTIONS[k].bg}`;
+}
+
+function buildReel(){
+  let html = "";
+  for(let l=0;l<LOOPS;l++) ORDER.forEach(k=>{
+    html += `<div class="photo" data-k="${k}" style="${photoStyle(k)}"><span>${OPTIONS[k].name}</span></div>`;
+  });
+  $("track").innerHTML = html;
+}
+
+function offsetFor(idx){
+  const cards = $("track").children, reelW = $("reel").clientWidth;
+  const c = cards[idx];
+  return reelW/2 - (c.offsetLeft + c.offsetWidth/2);
+}
+
+function goSpin(){
+  compute(); spun = false;
+  $("resultbox").innerHTML = "";
+  $("reel").classList.remove("done");
+  $("spinbtn").disabled = false; $("spinbtn").textContent = "Scopri il tuo regalo"; $("spinbtn").classList.remove("hidden");
+  show("spin");
+  buildReel();
+  const t = $("track"); t.style.transition = "none";
+  t.style.transform = `translateX(${offsetFor(2)}px)`;
+}
+
+function spinReel(){
+  if(spun) return; spun = true;
+  $("spinbtn").disabled = true; $("spinbtn").textContent = "Sto scegliendo…";
+  const win = ranking[0];
+  const idx = (LOOPS-2)*ORDER.length + ORDER.indexOf(win);
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const dur = reduce ? 0.01 : 5.6;
+  const t = $("track");
+  void t.offsetWidth;
+  t.style.transition = `transform ${dur}s cubic-bezier(.12,.62,.1,1)`;
+  t.style.transform = `translateX(${offsetFor(idx)}px)`;
+  setTimeout(()=>{
+    $("track").children[idx].classList.add("win");
+    $("reel").classList.add("done");
+    showResult(win);
+  }, dur*1000 + 80);
+}
+
+function showResult(win){
+  const o = OPTIONS[win], b = OPTIONS[ranking[1]];
+  if(navigator.vibrate) navigator.vibrate([20,40,20]);
+  $("spinbtn").classList.add("hidden");
+  $("resultbox").innerHTML = `
+    <div class="card result" role="status">
+      <div class="kicker">Il verdetto per Alessio</div>
+      <h3>${o.title}</h3>
+      <p class="why">${o.why}</p>
+      <p class="planb">Se cambi idea, il piano B è <strong>${b.name}</strong>.</p>
+    </div>
+    <div style="height:14px"></div>
+    <button class="btn plain" id="again">Rifai il quiz</button>
+    <p class="footnote">Fai uno screenshot e mandalo nel gruppo di famiglia</p>`;
+  $("again").onclick = restart;
+  confetti();
+}
+
+function confetti(){
+  const box = $("confetti"); box.innerHTML = "";
+  const colors = ["#FF375F","#FF9F0A","#30D158","#0A84FF","#BF5AF2"];
+  for(let i=0;i<70;i++){
+    const c = document.createElement("b");
+    c.style.left = Math.random()*100+"vw";
+    c.style.background = colors[i%colors.length];
+    c.style.animationDuration = (2+Math.random()*2)+"s";
+    c.style.animationDelay = (Math.random()*.5)+"s";
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML="",5000);
+}
+
+function restart(){ current=0; picks=[]; show("quiz"); renderQuestion(); }
+
+$("start").onclick = restart;
+$("back").onclick = ()=>{ if(current>0){ current--; renderQuestion(); } else show("intro"); };
+$("spinbtn").onclick = spinReel;
+</script>
+</body>
+</html>
